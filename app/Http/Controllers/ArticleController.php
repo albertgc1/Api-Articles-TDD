@@ -11,7 +11,9 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        return ArticleCollection::make(Article::all());
+        $articles = Article::applySorts(request('sort'));
+
+        return ArticleCollection::make($articles->get());
     }
 
     public function store(Request $request)

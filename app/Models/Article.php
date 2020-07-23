@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasSorts;
 use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
+    use HasSorts;
+
+    public $allowedSorts = ['title', 'content'];
+
     protected $fillable = [
     	'title', 'slug', 'content', 'category_id', 'user_id'
     ];
