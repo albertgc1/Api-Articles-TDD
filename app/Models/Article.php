@@ -10,6 +10,10 @@ class Article extends Model
     	'title', 'slug', 'content', 'category_id', 'user_id'
     ];
 
+    protected $casts = [
+        'id' => 'string'
+    ];
+
     public function user()
     {
     	return $this->belongsTo(App\Models\User::class);
