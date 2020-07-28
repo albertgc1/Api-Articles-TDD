@@ -11,9 +11,15 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::applySorts(request('sort'));
+        $articles = Article::applySorts(request('sort'))
+                    ->paginate(
+                        $perPage = request('page.size'),
+                        $columns = ['*'],
+                        $pageName = 'page[number]',
+                        $page = request('page.number')
+                    )->appends(request()->except('page.number'));
 
-        return ArticleCollection::make($articles->get());
+        return ArticleCollection::make($articles);
     }
 
     public function store(Request $request)
