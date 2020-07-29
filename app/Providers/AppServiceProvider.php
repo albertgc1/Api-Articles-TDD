@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\JsonApi\JsonApiBuilder;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Database\Eloquent\Builder;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Builder::mixin(new JsonApiBuilder);
     }
 }
