@@ -66,14 +66,14 @@ class FilterArticlesTest extends TestCase
     {
         factory(Article::class)->create([
             'title' => 'Aprende Laravel February',
-            'created_at' => now()->month(4)
+            'created_at' => now()->month(1)
         ]);
         factory(Article::class)->create([
             'title' => 'Aprende Laravel may',
             'created_at' => now()->month(5)
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[month]' => 4]));
+        $response = $this->getJson(route('api.v1.articles.index', ['filter[month]' => 1]));
 
         $response->assertJsonCount(1, 'data')
                 ->assertSee('Aprende Laravel February')
@@ -88,5 +88,53 @@ class FilterArticlesTest extends TestCase
         $response = $this->getJson(route('api.v1.articles.index', ['filter[unknow]' => 4]));
 
         $response->assertStatus(400);
+    }
+
+     /** @test */
+    public function can_filter_articles_by_title_and_content()
+    {
+        factory(Article::class)->create([
+            'title' => 'Aprende Laravel',
+            'content' => 'Content'
+        ]);
+        factory(Article::class)->create([
+            'title' => 'title 2',
+            'content' => 'Other Laravel'
+        ]);
+        factory(Article::class)->create([
+            'title' => 'Otro',
+            'content' => 'Other content'
+        ]);
+
+        $response = $this->getJson(route('api.v1.articles.index', ['filter[search]' => 'Laravel']));
+
+        $response->assertJsonCount(2, 'data')
+                ->assertSee('Aprende Laravel')
+                ->assertSee('title 2')
+                ->assertDontSee('Otro');
+    }
+
+     /** @test */
+    public function can_filter_articles_by_one_more_words_by_title_and_content()
+    {
+        factory(Article::class)->create([
+            'title' => 'Aprende Laravel',
+            'content' => 'Content'
+        ]);
+        factory(Article::class)->create([
+            'title' => 'Aprende',
+            'content' => 'Other Laravel'
+        ]);
+        factory(Article::class)->create([
+            'title' => 'Otro',
+            'content' => 'Other content'
+        ]);
+
+        $response = $this->getJson(route('api.v1.articles.index', ['filter[search]' => 'Aprende Laravel']));
+
+        $response->assertJsonCount(2, 'data')
+                ->assertSee('Aprende Laravel')
+                ->assertSee('Aprende')
+                ->assertDontSee('Otro');
     }
 }
