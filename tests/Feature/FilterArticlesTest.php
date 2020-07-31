@@ -16,7 +16,7 @@ class FilterArticlesTest extends TestCase
         factory(Article::class)->create(['title' => 'Aprende Laravel']);
         factory(Article::class)->create(['title' => 'Otro title']);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[title]' => 'Laravel']));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[title]' => 'Laravel']));
 
         $response->assertJsonCount(1, 'data')
                 ->assertSee('Aprende Laravel')
@@ -35,7 +35,7 @@ class FilterArticlesTest extends TestCase
             'content' => 'Other Content'
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[content]' => 'Laravel']));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[content]' => 'Laravel']));
 
         $response->assertJsonCount(1, 'data')
                 ->assertSee('Aprende Laravel')
@@ -54,7 +54,7 @@ class FilterArticlesTest extends TestCase
             'created_at' => now()->year(2019)
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[year]' => 2020]));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[year]' => 2020]));
 
         $response->assertJsonCount(1, 'data')
                 ->assertSee('Aprende Laravel 2020')
@@ -73,7 +73,7 @@ class FilterArticlesTest extends TestCase
             'created_at' => now()->month(5)
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[month]' => 1]));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[month]' => 1]));
 
         $response->assertJsonCount(1, 'data')
                 ->assertSee('Aprende Laravel February')
@@ -85,7 +85,7 @@ class FilterArticlesTest extends TestCase
     {
         factory(Article::class)->create();
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[unknow]' => 4]));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[unknow]' => 4]));
 
         $response->assertStatus(400);
     }
@@ -106,7 +106,7 @@ class FilterArticlesTest extends TestCase
             'content' => 'Other content'
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[search]' => 'Laravel']));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[search]' => 'Laravel']));
 
         $response->assertJsonCount(2, 'data')
                 ->assertSee('Aprende Laravel')
@@ -130,7 +130,7 @@ class FilterArticlesTest extends TestCase
             'content' => 'Other content'
         ]);
 
-        $response = $this->getJson(route('api.v1.articles.index', ['filter[search]' => 'Aprende Laravel']));
+        $response = $this->jsonApi()->get(route('api.v1.articles.index', ['filter[search]' => 'Aprende Laravel']));
 
         $response->assertJsonCount(2, 'data')
                 ->assertSee('Aprende Laravel')

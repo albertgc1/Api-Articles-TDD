@@ -8,11 +8,7 @@ use Illuminate\Support\Str;
 
 class Article extends Model
 {
-    public $allowedSorts = ['title', 'content'];
-
-    protected $fillable = [
-    	'title', 'slug', 'content', 'category_id', 'user_id'
-    ];
+    protected $guarded = [];
 
     protected $casts = [
         'id' => 'string'
