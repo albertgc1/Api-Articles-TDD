@@ -14,6 +14,11 @@ class Article extends Model
         'id' => 'string'
     ];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function user()
     {
     	return $this->belongsTo(App\Models\User::class);

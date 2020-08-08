@@ -118,6 +118,10 @@ return [
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
 
+    'no_underscores' => 'The :attribute must not contain underscores',
+    'no_starting_dashes' => 'The :attribute must not start with dashed',
+    'no_finish_dashes' => 'The :attribute must not finish with dashed',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

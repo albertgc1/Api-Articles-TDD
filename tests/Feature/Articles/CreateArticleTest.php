@@ -118,4 +118,72 @@ class CreateArticleTest extends TestCase
 
         $this->assertDatabaseMissing('articles', $article);
     }
+
+    /** @test */
+    public function slug_article_must_only_contain_letters_numbers_and_dashes()
+    {
+        $article = factory(Article::class)->raw(['slug' => '#$^^%$']);
+
+        Sanctum::actingAs(factory(User::class)->create());
+
+        $this->jsonApi()->content([
+            'data' => [
+                'type' => 'articles',
+                'attributes' => $article
+            ]
+        ])->post(route('api.v1.articles.create'))->assertStatus(422);
+
+        $this->assertDatabaseMissing('articles', $article);
+    }
+
+    /** @test */
+    public function slug_article_must_not_contain_underscores()
+    {
+        $article = factory(Article::class)->raw(['slug' => 'with_underscore']);
+
+        Sanctum::actingAs(factory(User::class)->create());
+
+        $this->jsonApi()->content([
+            'data' => [
+                'type' => 'articles',
+                'attributes' => $article
+            ]
+        ])->post(route('api.v1.articles.create'))->assertStatus(422);
+
+        $this->assertDatabaseMissing('articles', $article);
+    }
+
+    /** @test */
+    public function slug_article_must_not_start_with_dashes()
+    {
+        $article = factory(Article::class)->raw(['slug' => '-start-with-dashes']);
+
+        Sanctum::actingAs(factory(User::class)->create());
+
+        $this->jsonApi()->content([
+            'data' => [
+                'type' => 'articles',
+                'attributes' => $article
+            ]
+        ])->post(route('api.v1.articles.create'))->assertStatus(422);
+
+        $this->assertDatabaseMissing('articles', $article);
+    }
+
+    /** @test */
+    public function slug_article_must_not_finish_with_dashes()
+    {
+        $article = factory(Article::class)->raw(['slug' => 'finish-with-dashes-']);
+
+        Sanctum::actingAs(factory(User::class)->create());
+
+        $this->jsonApi()->content([
+            'data' => [
+                'type' => 'articles',
+                'attributes' => $article
+            ]
+        ])->post(route('api.v1.articles.create'))->assertStatus(422);
+
+        $this->assertDatabaseMissing('articles', $article);
+    }
 }
