@@ -21,12 +21,12 @@ class Article extends Model
 
     public function user()
     {
-    	return $this->belongsTo(App\Models\User::class);
+    	return $this->belongsTo(User::class);
     }
 
     public function category()
     {
-    	return $this->belongsTo(App\Models\Category::class);
+    	return $this->belongsTo(Category::class);
     }
 
     public function scopeTitle(Builder $query, $value)

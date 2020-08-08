@@ -48,7 +48,7 @@ class Validators extends AbstractValidators
                 'required',
                 'alpha_dash',
                 new Slug,
-                'unique:articles'
+                Rule::unique('articles')->ignore($record)
             ],
         ];
     }
