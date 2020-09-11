@@ -11,6 +11,11 @@ trait HasUuid{
         return false;
     }
 
+    public function getKeyType()
+    {
+        return 'string';
+    }
+
     public static function bootHasUuid()
     {
         static::creating(function ($model)
